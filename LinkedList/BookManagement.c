@@ -20,7 +20,7 @@ void printBook(Books book);
 Books getBook();
 void printLine();
 void printTitle();
-int menu(int menuItemCount, char *menuItem[]);
+int menu(const char* title, int menuItemCount, char *menuItem[]);
 int addToLast(ListBook** first, ListBook* newBook);
 int addToFirst(ListBook** first, ListBook* newBook);
 void printListBooks(ListBook* first);
@@ -44,7 +44,7 @@ int main(int argsCount, const char* args[]){
     int yourChoice;
     char filePath[256];
     do{
-        yourChoice = menu(topMenuItems, topMenu);
+        yourChoice = menu("BOOK MANAGEMENT APPLICATION", topMenuItems, topMenu);
         clearKeyboardBuffer();
         switch(yourChoice){
             case 1:
@@ -268,10 +268,10 @@ void getString(char *str, int length){
     str[strlen(str)-1] = '\0';
     clearKeyboardBuffer();
 }
-int menu(int menuItemCount, char *menuItem[]){
+int menu(const char* title, int menuItemCount, char *menuItem[]){
     int i=0, choice;
     printf("==============================\n");
-    printf(" MENU\n");
+    printf(" %s\n", title);
     printf("==============================\n");
     for(; i<menuItemCount; i++){
         printf(" %d. %s \n", i+1, menuItem[i]);
