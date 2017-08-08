@@ -39,11 +39,7 @@ int main(int count, const char* args[]){
 }
 
 LinkedList* addToHead(LinkedList *newElement, LinkedList *head){
-    if(head==NULL){
-        newElement->next = NULL;
-    }else{
-        newElement->next = head;
-    }
+    newElement->next = head;
     head = newElement;
     return head;
 }
