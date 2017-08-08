@@ -19,8 +19,8 @@ void getString(char *str, int length);
 void printLine();
 void printTitle();
 int menu(int menuItemCount, char *menuItem[]);
-ListBook* addToLast(ListBook* first, ListBook* newBook);
-ListBook* addToFirst(ListBook* first, ListBook* newBook);
+int addToLast(ListBook** first, ListBook* newBook);
+int addToFirst(ListBook** first, ListBook* newBook);
 void printListBooks(ListBook* first);
 int inputListBook(ListBook* lb);
 int insert(ListBook** first, ListBook* newBook, int atIndex);
@@ -48,8 +48,7 @@ int main( ) {
                 //add book
                 nBook = (ListBook*)malloc(sizeof(ListBook));
                 inputListBook(nBook);
-                //first = addToLast(first, last, nBook);
-                first = addToLast(first, nBook);
+                addToLast(&first, nBook);
                 break;
             case 2:
                 printf("Input index: ");
@@ -137,30 +136,36 @@ int count(ListBook* first){
     }
     return i;
 }
-ListBook* addToFirst(ListBook* first, ListBook* newBook){
-    newBook->next = first;
-    first = newBook;
-    return first;
-}
-ListBook* addToLast(ListBook* first, ListBook* newBook){
-    newBook->next = NULL;
+int addToFirst(ListBook** first, ListBook* newBook){
     if(first == NULL){
-        first = newBook;
+        return 0;
+    }
+    newBook->next = *first;
+    *first = newBook;
+    return 1;
+}
+int addToLast(ListBook** first, ListBook* newBook){
+    if(first == NULL){
+        return 0;
+    }
+    newBook->next = NULL;
+    if(*first == NULL){
+        *first = newBook;
     }else{
-        ListBook *last = first;
+        ListBook *last = *first;
         while(last->next != NULL){
             last = last->next;
         }
         last->next = newBook;
     }
-    return first;
+    return 1;
 }
 int insert(ListBook** first, ListBook* newBook, int atIndex){
-    if(first == NULL || *first == NULL){
+    if(first == NULL || *first == NULL || atIndex<0 || atIndex >= count(*first)){
         return 0;
     }
-    if(atIndex<0 || atIndex >= count(*first)){
-        return 0;
+    if(atIndex == 0){
+        return addToFirst(first, newBook);
     }
     ListBook* current = getAtIndex(*first, atIndex-1);
     if(current != NULL){
