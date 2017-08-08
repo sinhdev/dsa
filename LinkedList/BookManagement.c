@@ -13,9 +13,11 @@ struct LinkedList{
 };
 typedef struct LinkedList ListBook;
 /* Function Prototype */
+void getString(char *str, int length);
+void clearKeyboardBuffer();
+void waitEnterPress(char* msg);
 void printBook(Books book);
 Books getBook();
-void getString(char *str, int length);
 void printLine();
 void printTitle();
 int menu(int menuItemCount, char *menuItem[]);
@@ -28,21 +30,22 @@ int count(ListBook* first);
 ListBook* getAtIndex(ListBook* first, int index);
 ListBook* searchByIsbn(ListBook* first, char* ibn);
 int deleteByIsbn(ListBook** first, char* ibn);
-void clearCache();
-void waitEnterPress(char* msg);
 
-int main( ) {
-    int topMenuItems = 6;
-    char* topMenu[] = {"Add", "Insert", "Update", "Delete", "Display List Books", "Exit"};
+int readListBooksFromFile(ListBook** first, const char* filePath);
+int writeListBooksToFile(ListBook* first, const char* filePath);
+
+int main(int argsCount, const char* args[]){
+    int topMenuItems = 8;
+    char* topMenu[] = {"Add", "Insert", "Update", "Delete", "Display List Books", "Load from file...", "Save to File...", "Exit"};
     ListBook *first = NULL;
     ListBook *nBook;
     int position;
     char ibn[15];
     int yourChoice;
-
+    char filePath[256];
     do{
         yourChoice = menu(topMenuItems, topMenu);
-        clearCache();
+        clearKeyboardBuffer();
         switch(yourChoice){
             case 1:
                 //add book
@@ -97,8 +100,30 @@ int main( ) {
                 printListBooks(first);
                 waitEnterPress("Press Enter go to main menu...");
                 break;
+            case 6:
+                printf("Input file path to load data: ");
+                getString(filePath, 256);
+                if(readListBooksFromFile(&first, filePath)){
+                    printf("Read book from file \"%s\" complete!\n", filePath);
+                }else{
+                    printf("Read book form file %s error\n", filePath);
+                }
+                waitEnterPress("Press Enter go to main menu...");
+                break;
+            case 7:
+                if(count(first)>0){
+                    printf("Input file path: ");
+                    getString(filePath, 256);
+                    if(writeListBooksToFile(first, filePath)){
+                        printf("Write file complete!\n");
+                    }
+                }else{
+                    printf("No have an element in List Book\n");
+                }
+                waitEnterPress("Press Enter go to main menu...");
+                break;
             default:
-                printf("Exit Apps\n");
+                printf("Exit Book Management Apps...\n");
         }
     }while(yourChoice!=topMenuItems);
 
@@ -199,7 +224,7 @@ int deleteByIsbn(ListBook** first, char* ibn){
     return 0;
 }
 int inputListBook(ListBook* lb){
-    clearCache();
+    clearKeyboardBuffer();
     printf("Input Book isbn: ");
     getString(lb->book.isbn, 14);
     printf("Input Book title: ");
@@ -237,11 +262,11 @@ void printTitle(){
     printLine();
 }
 void getString(char *str, int length){
-    clearCache();
+    clearKeyboardBuffer();
     //input string
     fgets(str, length, stdin);
     str[strlen(str)-1] = '\0';
-    clearCache();
+    clearKeyboardBuffer();
 }
 int menu(int menuItemCount, char *menuItem[]){
     int i=0, choice;
@@ -254,12 +279,12 @@ int menu(int menuItemCount, char *menuItem[]){
     printf("==============================\n");
     do{
         printf("Your choice: ");
-        clearCache();
+        clearKeyboardBuffer();
         scanf("%d", &choice);
     }while(choice<=0 || choice>menuItemCount);
     return choice;
 }
-void clearCache(){
+void clearKeyboardBuffer(){
     //clear keyboard buffer on UNIX
     fseek(stdin, 0, SEEK_END);
     //clear keyboard buffer on Windows
@@ -267,6 +292,40 @@ void clearCache(){
 }
 void waitEnterPress(char* msg){
     printf("%s\n", msg);
-    clearCache();
+    clearKeyboardBuffer();
     getchar();
+}
+int readListBooksFromFile(ListBook** first, const char* filePath){
+    if(filePath == NULL || first == NULL){
+        return 0;
+    }
+    FILE *f = fopen(filePath, "rb");
+    if(f != NULL){
+        ListBook* lb;
+        while(!feof(f)){
+            lb = (ListBook*)malloc(sizeof(ListBook));
+            if(fread(lb, sizeof(ListBook), 1, f) > 0){
+                addToLast(first, lb);
+            }
+        }
+        fclose(f);
+        return 1;
+    }
+    return 0;
+}
+int writeListBooksToFile(ListBook* first, const char* filePath){
+    if(filePath == NULL || first == NULL || strcmp(filePath, "")==0){
+        return 0;
+    }
+    FILE *f = fopen(filePath, "wb");
+    if(f != NULL){
+        ListBook* it = first;
+        while(it!=NULL){
+            fwrite(it, sizeof(ListBook), 1, f);
+            it = it->next;
+        }
+        fclose(f);
+        return 1;
+    }
+    return 0;
 }
