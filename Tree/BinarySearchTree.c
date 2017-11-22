@@ -11,10 +11,10 @@ struct node
 int insert(struct node **root, int newValue);
 int insertRecursive(struct node **root, int newValue);
 struct node *search(struct node *root, int data);
-struct node *searchRecursive(struct node* root, int data);
-struct node *findMin(struct node* root);
-struct node *delete(struct node* root, int deleteValue);
-void showBST(struct node* root);
+struct node *searchRecursive(struct node *root, int data);
+struct node *findMin(struct node *root);
+struct node *delete (struct node *root, int deleteValue);
+void showBST(struct node *root);
 
 int main(int countArgs, char *args[])
 {
@@ -33,7 +33,7 @@ int main(int countArgs, char *args[])
 
     showBST(root);
 
-    delete(root, 9);
+    delete (root, 9);
     printf("\nafter delete:\n");
     showBST(root);
 
@@ -102,10 +102,8 @@ int insert(struct node **root, int newValue)
 struct node *search(struct node *root, int data)
 {
     struct node *current = root;
-    printf("Visiting elements: ");
     while (current != NULL && current->value != data)
     {
-        printf("%d ", current->value);
         //go to left tree
         if (current->value > data)
         {
@@ -119,61 +117,90 @@ struct node *search(struct node *root, int data)
     return current;
 }
 
-int insertRecursive(struct node **root, int newValue){
+int insertRecursive(struct node **root, int newValue)
+{
     struct node *newNode;
     newNode = (struct node *)malloc(sizeof(struct node));
     newNode->value = newValue;
     newNode->left = NULL;
     newNode->right = NULL;
 
-    if(*root == NULL){
+    if (*root == NULL)
+    {
         *root = newNode;
-    }else{
-        if(newValue < (*root)->value){
+    }
+    else
+    {
+        if (newValue < (*root)->value)
+        {
             insert(&(*root)->left, newValue);
-        }else{
+        }
+        else
+        {
             insert(&(*root)->right, newValue);
         }
     }
     return 1;
 }
-struct node *searchRecursive(struct node *root, int data){
-    if(root==NULL || data == root->value){
+struct node *searchRecursive(struct node *root, int data)
+{
+    if (root == NULL || data == root->value)
+    {
         return root;
-    } else if(data < root->value){
+    }
+    else if (data < root->value)
+    {
         return searchRecursive(root->left, data);
-    } else {
+    }
+    else
+    {
         return searchRecursive(root->right, data);
     }
 }
 
-struct node *findMin(struct node *root){
-    if(root==NULL || root->left==NULL){
+struct node *findMin(struct node *root)
+{
+    if (root == NULL || root->left == NULL)
+    {
         return root;
-    } else{
+    }
+    else
+    {
         return findMin(root->left);
     }
 }
 
-struct node *delete(struct node *root, int deleteValue){
+struct node *delete (struct node *root, int deleteValue)
+{
     struct node *temp;
-    if(root==NULL){
+    if (root == NULL)
+    {
         return NULL;
     }
-    else if(deleteValue<root->value){
-        root->left = delete(root->left, deleteValue);
-    } else if(deleteValue>root->value){
-        root->right = delete(root->right, deleteValue);
-    } else{
-        if(root->left==NULL){
+    else if (deleteValue < root->value)
+    {
+        root->left = delete (root->left, deleteValue);
+    }
+    else if (deleteValue > root->value)
+    {
+        root->right = delete (root->right, deleteValue);
+    }
+    else
+    {
+        if (root->left == NULL)
+        {
             temp = root->right;
             root->right = NULL;
             return temp;
-        } else if(root->right==NULL){
+        }
+        else if (root->right == NULL)
+        {
             temp = root->left;
             root->left = NULL;
             return temp;
-        } else {
+        }
+        else
+        {
             temp = findMin(root->right);
             root->value = temp->value;
             root->right = NULL;
@@ -182,8 +209,10 @@ struct node *delete(struct node *root, int deleteValue){
     return root;
 }
 
-void showBST(struct node* root){
-    if(root==NULL){
+void showBST(struct node *root)
+{
+    if (root == NULL)
+    {
         return;
     }
     showBST(root->left);
