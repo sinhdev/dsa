@@ -21,9 +21,9 @@ void quickSort(int* a, int left, int right){
     int pivot = a[right];
     int partitionIndex = partition(a, left, right, pivot);
     
-    swap(a+right, a+partitionIndex);
-    // a[right] = a[partitionIndex];
-    // a[partitionIndex] = pivot;
+    // swap(a+right, a+partitionIndex);
+    a[right] = a[partitionIndex];
+    a[partitionIndex] = pivot;
 
     quickSort(a, left, partitionIndex-1);
     quickSort(a, partitionIndex+1, right);
@@ -32,17 +32,17 @@ void quickSort(int* a, int left, int right){
 int partition(int *a, int left, int right, int pivot){
     int leftIndex = left - 1;
     int rightIndex = right;
-    // int temp;
+    int temp;
     while(1){
         while(a[++leftIndex]< pivot);
         while(rightIndex>0 && a[--rightIndex] > pivot);
         if(leftIndex >= rightIndex) {
             break;
         }else{
-            swap(a+leftIndex, a+rightIndex);
-            // temp = a[leftIndex];
-            // a[leftIndex] = a[rightIndex];
-            // a[rightIndex] = temp;
+            //swap(a+leftIndex, a+rightIndex);
+            temp = a[leftIndex];
+            a[leftIndex] = a[rightIndex];
+            a[rightIndex] = temp;
         }
     }
     return leftIndex;
