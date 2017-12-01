@@ -28,10 +28,14 @@ int main(int countArgs, char** args){
     push(&s, 5);
 
     int topElement;
+    /*
     while(s.top >= 0){
         if(pop(&s, &topElement)){
             printf("%d\n", topElement);
         }
+    }*/
+    while(pop(&s, &topElement)){
+        printf("%d\n", topElement);
     }
     return 0;
 }
