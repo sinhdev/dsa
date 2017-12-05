@@ -1,118 +1,66 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
 
-struct Queue{
-    int *data;
-    int maxSize;
+struct queue{
+    int data[50];
+    int maxIndex;
     int front;
     int rear;
 };
 
-bool initQueue(struct Queue *queue, int maxSize);
-bool enqueue(struct Queue *queue, int rearValue);
-bool dequeue(struct Queue *queue, int *frontValue);
-bool peek(struct Queue queue, int *frontValue);
-bool isFull(struct Queue queue);
-bool isEmpty(struct Queue queue);
+int enqueue(int value, struct queue* q);
+int dequeue(int *value, struct queue* q);
 
-int main(int countArgs, char** args){
-    struct Queue q;
-    initQueue(&q, 3);
+int main(int count, char** args){
+    //declare queue
+    struct queue myQueue;
+    //init queue
+    myQueue.maxIndex = 49;
+    myQueue.front = 0;
+    myQueue.rear = -1;
 
-    if(enqueue(&q, 1)){
-        printf("enqueue to queue complete!!!\n");
-    }else{
-        printf("Queue is full!!!\n");
-    }
-    if(enqueue(&q, 2)){
-        printf("enqueue to queue complete!!!\n");
-    }else{
-        printf("Queue is full!!!\n");
-    }
-    if(enqueue(&q, 3)){
-        printf("enqueue to queue complete!!!\n");
-    }else{
-        printf("Queue is full!!!\n");
-    }
+    enqueue(1, &myQueue);
+    enqueue(2, &myQueue);
+    enqueue(3, &myQueue);
+    enqueue(4, &myQueue);
+    enqueue(5, &myQueue);
 
-    int frontValue;
-    if(dequeue(&q, &frontValue)){
-        printf("front value: %d\n", frontValue);
+    int front;
+    while(dequeue(&front, &myQueue)){
+        printf("%d | ", front);
     }
-    if(dequeue(&q, &frontValue)){
-        printf("front value: %d\n", frontValue);
-    }
-
-    if(dequeue(&q, &frontValue)){
-        printf("front value: %d\n", frontValue);
-    }
-    printf("front: %d, rear: %d\n", q.front, q.rear);
-    if(enqueue(&q, 4)){
-        printf("enqueue to queue complete!!!\n");
-    }else{
-        printf("Queue is full!!!\n");
-    }
-    printf("front: %d, rear: %d\n", q.front, q.rear);
-    
     return 0;
 }
-
-bool initQueue(struct Queue* queue, int maxSize){
-    queue->maxSize = maxSize;
-    queue->data = (int*)malloc(maxSize*sizeof(int));
-    queue->front = 0;
-    queue->rear = -1;
-    return true;
-}
-
-bool enqueue(struct Queue* queue, int rearValue){
-    //Step 1 − Check if the queue is full
-    if(queue->rear==queue->maxSize-1){
-        if(queue->front==0){
-            //Step 2 − If the queue is full, produce overflow error and exit
-            return false;
-        }else if(queue->front>0){
-            //rear is last element of array but front not is first element of array -> move data to head of array
-            for(int i=0, j=queue->front; j<=queue->rear; i++, j++){
-                queue->data[i] = queue->data[j];
-            }
-            queue->rear -= queue->front;
-            queue->front = 0;
-        }
-    }
-    //Step 3 − If the queue is not full, increment rear pointer to point the next empty space
-    queue->rear += 1;
-    //Step 4 − Add data element to the queue location, where the rear is pointing
-    queue->data[queue->rear] = rearValue;
-    //Step 5 − return success
-    return true;
-}
-
-bool dequeue(struct Queue *queue, int *frontValue){
+int dequeue(int *value, struct queue* q){
     //Step 1 − Check if the queue is empty
-    if(queue->rear<queue->front){
+    if(q->front > q->rear){
         //Step 2 − If the queue is empty, produce underflow error and exit.
-        return false;
+        return 0;
     }
     //Step 3 − If the queue is not empty, access the data where front is pointing
-    *frontValue = queue->data[queue->front];
+    *value = q->data[q->front];
     //Step 4 − Increment front pointer to point to the next available data element
-    queue->front += 1;
+    q->front += 1;
     //Step 5 − Return success
-    return true;
+    return 1;
 }
-
-bool peek(struct Queue queue, int *frontValue){
-    if(isEmpty(queue)){
-        return false;
+int enqueue(int value, struct queue* q){
+    //Step 1 − Check if the queue is full
+    if(q->rear==q->maxIndex){
+        if(q->front==0){
+            //Step 2 − If the queue is full, produce overflow error and exit
+            return 0;
+        }
+        int i, newRear = q->rear - q->front;
+        for(i=0; i<newRear; i++){
+            q->data[i] = q->data[i + q->front];
+        }
+        q->front = 0;
+        q->rear = newRear;
     }
-    *frontValue = queue.data[queue.front];
-    return true;
-}
-bool isFull(struct Queue queue){
-    return queue.rear == queue.maxSize-1;
-}
-bool isEmpty(struct Queue queue){
-    return queue.rear < queue.front;
+    //Step 3 − If the queue is not full, increment rear pointer to point the next empty space
+    q->rear += 1;
+    //Step 4 − Add data element to the queue location, where the rear is pointing
+    q->data[q->rear] = value;
+    //Step 5 − return success
+    return 1;
 }
