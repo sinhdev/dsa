@@ -25,12 +25,12 @@ int main(int argCount, char* args[]){
     int e, position;
     char yn;
     char* mainMenu[] = {"Init Array List", "Insert", "Update", "Delete", "Display Array List", "Find Element", "Get Element", "Check Empty", "Exit"};
-    initArrayList(&intArrayList, 8);
+    initArrayList(&intArrayList, 16);
     do{
         mainMenuChoice = menu("int Array List Demo", 9, mainMenu);
         switch(mainMenuChoice){
             case 1:
-                initArrayList(&intArrayList, 8);
+                initArrayList(&intArrayList, 16);
                 break;
             case 2:
                 printf("input element value: ");
