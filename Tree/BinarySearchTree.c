@@ -190,12 +190,14 @@ struct node *delete (struct node *root, int deleteValue)
         if (root->left == NULL)
         {
             temp = root->right;
+            free(root->right);
             root->right = NULL;
             return temp;
         }
         else if (root->right == NULL)
         {
             temp = root->left;
+            free(root->left);
             root->left = NULL;
             return temp;
         }
@@ -203,8 +205,23 @@ struct node *delete (struct node *root, int deleteValue)
         {
             temp = findMin(root->right);
             root->value = temp->value;
-            root->right = NULL;
-            free(temp);
+            if (temp == root->right)
+            {
+                temp = root->right;
+                free(root->right);
+                root->right = NULL;
+            }
+            else
+            {
+                struct node *tn;
+                tn = root->right;
+                while (tn->left != temp)
+                {
+                    tn = tn->left;
+                }
+                tn->left = NULL;
+                free(temp);
+            }
         }
     }
     return root;
