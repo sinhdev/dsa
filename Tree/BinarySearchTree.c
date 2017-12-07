@@ -33,7 +33,7 @@ int main(int countArgs, char *args[])
 
     showBST(root);
 
-    root = delete (root, 9);
+    root = delete (root, 4);
     printf("\nafter delete:\n");
     showBST(root);
 
@@ -190,15 +190,15 @@ struct node *delete (struct node *root, int deleteValue)
         if (root->left == NULL)
         {
             temp = root->right;
-            free(root->right);
             root->right = NULL;
+            free(root);
             return temp;
         }
         else if (root->right == NULL)
         {
             temp = root->left;
-            free(root->left);
             root->left = NULL;
+            free(root);
             return temp;
         }
         else
