@@ -9,33 +9,33 @@ struct node
 };
 
 int insert(struct node **root, int newValue);
-int insertRecursive(struct node **root, int newValue);
+int recursiveInsert(struct node **root, int newValue);
 struct node *search(struct node *root, int data);
-struct node *searchRecursive(struct node *root, int data);
+struct node *recursiveSearch(struct node *root, int data);
 struct node *findMin(struct node *root);
 struct node *delete (struct node *root, int deleteValue);
-void showBST(struct node *root);
+void printInorderTraversal(struct node *root);
 
 int main(int countArgs, char *args[])
 {
     struct node *root;
     root = NULL;
 
-    insertRecursive(&root, 5);
-    insertRecursive(&root, 7);
-    insertRecursive(&root, 6);
-    insertRecursive(&root, 4);
-    insertRecursive(&root, 2);
-    insertRecursive(&root, 1);
-    insertRecursive(&root, 9);
-    insertRecursive(&root, 3);
-    insertRecursive(&root, 8);
+    recursiveInsert(&root, 5);
+    recursiveInsert(&root, 7);
+    recursiveInsert(&root, 6);
+    recursiveInsert(&root, 4);
+    recursiveInsert(&root, 2);
+    recursiveInsert(&root, 1);
+    recursiveInsert(&root, 9);
+    recursiveInsert(&root, 3);
+    recursiveInsert(&root, 8);
 
-    showBST(root);
+    printInorderTraversal(root);
 
     root = delete (root, 4);
     printf("\nafter delete:\n");
-    showBST(root);
+    printInorderTraversal(root);
 
     struct node *found;
     found = search(root, 8);
@@ -117,7 +117,7 @@ struct node *search(struct node *root, int data)
     return current;
 }
 
-int insertRecursive(struct node **root, int newValue)
+int recursiveInsert(struct node **root, int newValue)
 {
     struct node *newNode;
     newNode = (struct node *)malloc(sizeof(struct node));
@@ -142,7 +142,7 @@ int insertRecursive(struct node **root, int newValue)
     }
     return 1;
 }
-struct node *searchRecursive(struct node *root, int data)
+struct node *recursiveSearch(struct node *root, int data)
 {
     if (root == NULL || data == root->value)
     {
@@ -150,11 +150,11 @@ struct node *searchRecursive(struct node *root, int data)
     }
     else if (data < root->value)
     {
-        return searchRecursive(root->left, data);
+        return recursiveSearch(root->left, data);
     }
     else
     {
-        return searchRecursive(root->right, data);
+        return recursiveSearch(root->right, data);
     }
 }
 
@@ -207,19 +207,18 @@ struct node *delete (struct node *root, int deleteValue)
             root->value = temp->value;
             if (temp == root->right)
             {
-                temp = root->right;
                 free(root->right);
                 root->right = NULL;
             }
             else
             {
-                struct node *tn;
-                tn = root->right;
-                while (tn->left != temp)
+                struct node *parentMin;
+                parentMin = root->right;
+                while (parentMin->left != temp)
                 {
-                    tn = tn->left;
+                    parentMin = parentMin->left;
                 }
-                tn->left = NULL;
+                parentMin->left = NULL;
                 free(temp);
             }
         }
@@ -227,13 +226,13 @@ struct node *delete (struct node *root, int deleteValue)
     return root;
 }
 
-void showBST(struct node *root)
+void printInorderTraversal(struct node *root)
 {
     if (root == NULL)
     {
         return;
     }
-    showBST(root->left);
+    printInorderTraversal(root->left);
     printf("value: %d\n", root->value);
-    showBST(root->right);
+    printInorderTraversal(root->right);
 }
