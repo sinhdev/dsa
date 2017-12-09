@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+// sort animation compare: https://www.toptal.com/developers/sorting-algorithms
+// sort animation: https://www.cs.usfca.edu/~galles/visualization/ComparisonSort.html
 void quickSort(int* a, int left, int right);
 int partition(int *a, int left, int right, int pivot);
 void swap(int *a, int *b);
