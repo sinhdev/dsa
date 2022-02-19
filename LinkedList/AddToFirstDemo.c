@@ -1,14 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct sLinkedList{
+typedef struct sLinkedList{
     int value;
     struct sLinkedList * next;
-};
-typedef struct sLinkedList LinkedList;
+} LinkedList;
 
 LinkedList* addToHead(LinkedList *newElement, LinkedList *head);
-
 int main(int count, const char* args[]){
     LinkedList *head;
     head = NULL;

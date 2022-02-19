@@ -2,11 +2,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-struct Node{
+typedef struct Node{
     int data;
     struct Node * next;
-};
-typedef struct Node intLinkedList;
+} intLinkedList;
 
 int insertToHead();
 void display(intLinkedList *head);
@@ -55,6 +54,9 @@ int main(int argCount, char* args[]){
                 }
                 break;
         }
+        printf("Press enter key to continue...");
+        clearKeyboardBuffer();
+        getchar();
     }while(mainMenuChoice!=6);
 }
 
