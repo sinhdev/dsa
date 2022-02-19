@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 struct Node{
-    int value;
+    int data;
     struct Node * next;
 };
 typedef struct Node intLinkedList;
@@ -63,7 +63,7 @@ int insertToHead(int value, intLinkedList** head){
     //allocate memory for new element
     newElement = (intLinkedList*)malloc(sizeof(intLinkedList));
     //assign new element value for value parameter
-    newElement->value = value;
+    newElement->data = value;
     //step 1: assign next new element for head element
     newElement->next = *head;
     //step 2: assign head element for new element
@@ -75,7 +75,7 @@ void display(intLinkedList *head){
     intLinkedList *iterator;
     iterator = head;
     while(iterator != NULL){
-        printf("|value:%d|->", iterator->value);
+        printf("|data:%d|->", iterator->data);
         iterator = iterator->next;
     }
     printf("NULL\n");
@@ -83,7 +83,7 @@ void display(intLinkedList *head){
 void displayForLoop(intLinkedList *head){
     intLinkedList *iterator;
     for(iterator=head; iterator!=NULL; iterator=iterator->next){
-        printf("|value:%d|->", iterator->value);
+        printf("|data:%d|->", iterator->data);
     }
     printf("NULL\n");
 }
@@ -108,7 +108,7 @@ bool delete(int value, intLinkedList **head){
     pre = *head;
     bool deleted = false;
     while(current != NULL){
-        if(current->value == value){
+        if(current->data == value){
             deleted = true;
             if(current==*head){
                 //delete head
@@ -136,7 +136,7 @@ int indexOf(int value, intLinkedList *head){
     intLinkedList *iterator;
     int i;
     for(iterator=head, i=0; iterator!=NULL; iterator=iterator->next, i++){
-        if(iterator->value==value){
+        if(iterator->data==value){
             return i;
         }
     }
