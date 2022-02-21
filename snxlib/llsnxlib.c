@@ -2,12 +2,12 @@ typedef struct node
 {
   void *data;
   struct node *next;
-} Node;
+} llNode;
 typedef struct
 {
   unsigned int sizeOfElement;
-  Node *head;
-  Node *it;
+  llNode *head;
+  llNode *it;
 } LinkedList;
 
 LinkedList *llInit(unsigned sizeOfElement)
@@ -27,8 +27,8 @@ int llInsert(LinkedList *ll, void *newElement)
   if(ll==NULL || ll->sizeOfElement<=0 || newElement==NULL){
     return 0;
   }
-  Node *newNode;
-  newNode = (Node *)malloc(sizeof(Node));
+  llNode *newNode;
+  newNode = (llNode *)malloc(sizeof(llNode));
   newNode->data = malloc(ll->sizeOfElement);
   memcpy(newNode->data, newElement, ll->sizeOfElement);
   newNode->next = ll->head;
@@ -45,7 +45,7 @@ int llInsertAt(LinkedList *ll, void *newElement, unsigned position)
   {
     return 0;
   }
-  Node *cur, *pre;
+  llNode *cur, *pre;
   cur = ll->head;
   int i = 0;
   while (cur != NULL && i < position)
@@ -58,8 +58,8 @@ int llInsertAt(LinkedList *ll, void *newElement, unsigned position)
   {
     return 0;
   }
-  Node *newNode;
-  newNode = (Node *)malloc(sizeof(Node));
+  llNode *newNode;
+  newNode = (llNode *)malloc(sizeof(llNode));
   newNode->data = malloc(ll->sizeOfElement);
   memcpy(newNode->data, newElement, ll->sizeOfElement);
   pre->next = newNode;
@@ -78,7 +78,7 @@ void* llGetAt(LinkedList *ll, unsigned int position){
   if(position <0){
     return NULL;
   }
-  Node *cur;
+  llNode *cur;
   int i;
   for(cur=ll->head, i=0; i<position && cur!=NULL; cur = cur->next, i++);
   if(cur == NULL){
@@ -92,7 +92,7 @@ int llRemove(LinkedList *ll)
   {
     return 0;
   }
-  Node *delFirst;
+  llNode *delFirst;
   delFirst = ll->head;
   ll->head = ll->head->next;
   free(delFirst);
@@ -108,7 +108,7 @@ int llRemoveAt(LinkedList *ll, unsigned int position)
   {
     return 0;
   }
-  Node *cur, *pre;
+  llNode *cur, *pre;
   cur = ll->head;
   int i = 0;
   while (cur != NULL && i < position)
@@ -151,7 +151,7 @@ void *llNext(LinkedList *ll)
 }
 void llDestroy(LinkedList *ll)
 {
-  Node *curNode, *delNode;
+  llNode *curNode, *delNode;
   curNode = ll->head;
   while (curNode != NULL)
   {
@@ -173,7 +173,7 @@ int llSaveToFile(LinkedList *ll, const char *path)
     return 0;
   }
   fwrite(&(ll->sizeOfElement), sizeof(unsigned int), 1, f);
-  Node *cur;
+  llNode *cur;
   cur = ll->head;
   while (cur != NULL)
   {
@@ -201,7 +201,7 @@ LinkedList *llLoadFromFile(const char *path)
     return NULL;
   }
   ll->head = NULL;
-  Node *cur, *pre;
+  llNode *cur, *pre;
   void* temp;
   int i=0;
   while (!feof(f))
