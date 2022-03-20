@@ -115,7 +115,7 @@ void bstTraversalCondition(btNode *root, nodeCompare *nodeCmp, const void *key, 
 {
   if (root == NULL)
     return;
-  if (nodeCmp(root->data, key) == 0)
+  if (!nodeCmp(root->data, key))
     tf(root->data);
   bstTraversalCondition(root->left, nodeCmp, key, tf);
   bstTraversalCondition(root->right, nodeCmp, key, tf);
@@ -185,7 +185,7 @@ btNode *bstSearchCondition(btNode *root, nodeCompare searchCriteria, void *key)
 {
   if (root == NULL || searchCriteria == NULL || key == NULL)
     return NULL;
-  if (searchCriteria(root->data, key) == 0)
+  if (!searchCriteria(root->data, key))
     return root;
   btNode *left = bstSearchCondition(root->left, searchCriteria, key);
   if (left != NULL)

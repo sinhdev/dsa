@@ -81,9 +81,9 @@ int contactCmp(const void *c1, const void *c2)
   Contact *con1 = (Contact *)c1;
   Contact *con2 = (Contact *)c2;
   int cmp;
-  if ((cmp = strcmp(con1->firstName, con2->firstName)) == 0)
+  if (!(cmp = strcmp(con1->firstName, con2->firstName)))
   {
-    if ((cmp = strcmp(con1->lastName, con2->lastName)) == 0)
+    if (!(cmp = strcmp(con1->lastName, con2->lastName)))
     {
       cmp = strcmp(con1->middleName, con2->middleName);
     }
